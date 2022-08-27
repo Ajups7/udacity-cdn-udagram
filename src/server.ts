@@ -26,11 +26,13 @@ import path from "path";
     // Read previous files before filtering
     const files = fs.readdirSync(dirPath);
 
-    const filteredImageFile = await filterImageFromURL(image_url);
-
-    await deleteLocalFiles(files);
-
-    return res.sendFile(filteredImageFile);
+    try {
+      const filteredImageFile = await filterImageFromURL(image_url);
+      await deleteLocalFiles(files);
+      return res.sendFile(filteredImageFile);
+    } catch (error) {
+      return res.status(422).send(error);
+    }
   });
 
   // Root Endpoint
